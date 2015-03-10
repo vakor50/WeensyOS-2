@@ -18,40 +18,32 @@
 #define PRINTCHAR	('1' | 0x0C00)
 #endif
 
-#ifndef SHARE
-#define SHARE 		10
+#ifndef RANDSEED
+#define RANDSEED	0xACE1u
 #endif
 
-#ifndef PRIORITY
-#define PRIORITY	6
-#endif
+unsigned short seed = RANDSEED;
 
-#define ALTERNATESYNC
-
+int priority_rand() {
+	unsigned randbit = ((seed >> 0) ^ (seed >> 2) ^ (seed >> 3) ^ (seed >> 5)) &  1;
+	return (seed = (seed >> 1) | (randbit << 15));
+}
 
 void
 start(void)
 {
 	int i;
 	int to_print = PRINTCHAR;
-	sys_setshare(SHARE);
-	sys_setpriority(PRIORITY);
-	sys_yield();
+	int priority = 0;
+	// update priority
+	while (!(priority = priority_rand() % NPROCS));
 
+	sys_setshare();
+	sys_setpriority(priority);
 	
 	for (i = 0; i < RUNCOUNT; i++) {
 		// Write characters to the console, yielding after each one.
-		#ifndef ALTERNATESYNC
-			sys_write_char(to_print);
-		#endif
-		#ifndef ALTERNATESYNC
-			while (atomic_swap(&write_lock, 1) != 0)
-				continue;
-
-			*cursorpos++ = PRINTCHAR;
-			atomic_swap(&write_lock, 0);
-		#endif ALTERNATESYNC
-		sys_yield();
+		sys_write_char(to_print);
 	}
 
 	// Exercise 2

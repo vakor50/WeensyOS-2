@@ -98,7 +98,7 @@ start(void)
 	cursorpos = (uint16_t *) 0xB8000;
 
 	// Initialize the scheduling algorithm.
-	scheduling_algorithm = 2;
+	scheduling_algorithm = 0;
 
 	// Switch to the first process.
 	run(&proc_array[1]);
@@ -148,12 +148,18 @@ interrupt(registers_t *reg)
 		schedule();
 
 	case INT_SYS_SETSHARE:
-		current->p_share = reg->reg_eax;
+		current->p_share = current->p_pid;
 		run(current);
 
 	case INT_SYS_SETPRIORITY:
 		current->p_priority = reg->reg_eax;
-		run(current);
+		if (current->p_pid == (NPROCS - 1)) 
+			schedule();
+		else 
+		{
+			process_t *new = current + 1;
+			run(new);
+		}
 
 	case INT_SYS_WRITE:
 		*cursorpos++ = reg->reg_eax;

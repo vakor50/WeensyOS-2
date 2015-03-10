@@ -15,18 +15,17 @@
 
 
 /*****************************************************************************
- * sys_set_share(share)
+ * sys_set_share
  *
  *   Set the process's share to a specified share
  *
  *****************************************************************************/
 
 static inline void
-sys_setshare(int share)
+sys_setshare(void)
 {
 	asm volatile("int %0\n"
 		     : : "i" (INT_SYS_SETSHARE),
-		         "a" (share)
 		     : "cc", "memory");
 }
 
