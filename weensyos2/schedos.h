@@ -23,4 +23,7 @@
 
 extern uint16_t * volatile cursorpos;
 
+// for synchronization
+extern uint32_t write_lock;
+
 #endif
