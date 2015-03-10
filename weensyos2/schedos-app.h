@@ -54,7 +54,7 @@ sys_share(int share)
  *   Print the character associated with the process to output
  *
  *****************************************************************************/
-/*
+
 static inline void
 sys_write_char(unsigned int character)
 {
@@ -63,7 +63,7 @@ sys_write_char(unsigned int character)
 		         "a" (character)
 		     : "cc", "memory");
 }
-*/
+
 
 /*****************************************************************************
  * sys_yield
