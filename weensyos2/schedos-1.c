@@ -28,8 +28,8 @@ void
 start(void)
 {
 	int i;
-	int to_print = PRINTCHAR;
-	int priority = 0;
+	//int to_print = PRINTCHAR;
+	//int priority = 0;
 
 	//while (!(priority = generate_priority() % NPROCS)); //priority > 0
 	sys_priority(PRIORITY);

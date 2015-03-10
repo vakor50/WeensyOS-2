@@ -37,7 +37,7 @@ sys_priority(unsigned int priority)
  *   Set the process's share to a specified share
  *
  *****************************************************************************/
-
+/*
 static inline void
 sys_share(void)
 {
@@ -45,7 +45,7 @@ sys_share(void)
 		     : : "i" (INT_SYS_USER2)
 		     : "cc", "memory");
 }
-
+*/
 
 /*****************************************************************************
  * sys_write_char(character)
@@ -53,7 +53,7 @@ sys_share(void)
  *   Print the character associated with the process to output
  *
  *****************************************************************************/
-
+/*
 static inline void
 sys_write_char(unsigned int character)
 {
@@ -62,7 +62,7 @@ sys_write_char(unsigned int character)
 		         "a" (character)
 		     : "cc", "memory");
 }
-
+*/
 
 /*****************************************************************************
  * sys_yield
