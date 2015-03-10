@@ -91,6 +91,9 @@ start(void)
 
 		// Mark the process as runnable!
 		proc->p_state = P_RUNNABLE;
+
+		proc->p_priority = proc->p_share = proc->p_sharedone = 0;
+		proc->p_runtime = 0;
 	}
 
 	// Initialize the cursor-position shared variable to point to the
