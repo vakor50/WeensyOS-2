@@ -18,14 +18,39 @@
 #define PRINTCHAR	('1' | 0x0C00)
 #endif
 
+#ifndef SHARE
+#define SHARE 		10
+#endif
+
+#ifndef PRIORITY
+#define PRIORITY	6
+#endif
+
+#define ALTERNATESYNC
+
+
 void
 start(void)
 {
 	int i;
+	int to_print = PRINTCHAR;
+	sys_setshare(SHARE);
+	sys_setpriority(PRIORITY);
+	sys_yield();
 
+	
 	for (i = 0; i < RUNCOUNT; i++) {
 		// Write characters to the console, yielding after each one.
-		*cursorpos++ = PRINTCHAR;
+		#ifndef ALTERNATESYNC
+			sys_write_char(to_print);
+		#endif
+		#ifdef ALTERNATESYNC
+			while (atomic_swap(&write_lock, 1) != 0)
+				continue;
+
+			*cursorpos++ = PRINTCHAR;
+			atomic_swap(&write_lock, 0);
+		#endif ALTERNATESYNC
 		sys_yield();
 	}
 

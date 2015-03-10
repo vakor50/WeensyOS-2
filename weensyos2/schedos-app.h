@@ -15,6 +15,56 @@
 
 
 /*****************************************************************************
+ * sys_set_share(share)
+ *
+ *   Set the process's share to a specified share
+ *
+ *****************************************************************************/
+
+static inline void
+sys_setshare(int share)
+{
+	asm volatile("int %0\n"
+		     : : "i" (INT_SYS_SETSHARE),
+		         "a" (share)
+		     : "cc", "memory");
+}
+
+/*****************************************************************************
+ * sys_set_priority(priority)
+ *
+ *   Set the process's priority
+ *
+ *****************************************************************************/
+
+static inline void
+sys_setpriority(unsigned int priority)
+{
+	asm volatile("int %0\n"
+		     : : "i" (INT_SYS_SETPRIORITY),
+		         "a" (priority)
+		     : "cc", "memory");
+}
+
+
+/*****************************************************************************
+ * sys_write_char(character)
+ *
+ *   Print the character associated with the process to output
+ *
+ *****************************************************************************/
+
+static inline void
+sys_write_char(unsigned int character)
+{
+	asm volatile("int %0\n"
+		     : : "i" (INT_SYS_WRITE),
+		         "a" (character)
+		     : "cc", "memory");
+}
+
+
+/*****************************************************************************
  * sys_yield
  *
  *   Yield control of the CPU to the kernel, which will pick another
