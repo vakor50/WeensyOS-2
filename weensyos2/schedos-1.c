@@ -31,7 +31,7 @@ start(void)
 
 	// Exercise 2
 	// now processes exit, and don't yield forever
-	sys_exit();
+	sys_exit(0);
 	// Yield forever.
 	//while (1)
 	//	sys_yield();
