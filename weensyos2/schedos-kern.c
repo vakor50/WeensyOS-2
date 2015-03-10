@@ -65,7 +65,7 @@ start(void)
 
 	// Set up hardware (schedos-x86.c)
 	segments_init();
-	interrupt_controller_init(1);
+	interrupt_controller_init(0);
 	console_clear();
 
 	// Initialize process descriptors as empty
@@ -103,7 +103,7 @@ start(void)
 	cursorpos = (uint16_t *) 0xB8000;
 
 	// Initialize the scheduling algorithm.
-	scheduling_algorithm = 0;
+	scheduling_algorithm = 3;
 
 	// Switch to the first process.
 	run(&proc_array[1]);
@@ -253,7 +253,7 @@ schedule(void)
 					proc_array[pid].p_runtime = 0;
 				else
 				{
-					proc_array[pid].p_runtime;
+					proc_array[pid].p_runtime++;
 					run(&proc_array[pid]);
 				}
 			}
