@@ -40,10 +40,10 @@ start(void)
 
 	for (i = 0; i < RUNCOUNT; i++) {
 		// Write characters to the console, yielding after each one.
-		*cursorpos++ = PRINTCHAR;
-		sys_yield();
-		//sys_write_char(to_print);
+		//*cursorpos++ = PRINTCHAR;
 		//sys_yield();
+		sys_write_char(PRINTCHAR);
+		sys_yield();
 	}
 
 	// Exercise 2
