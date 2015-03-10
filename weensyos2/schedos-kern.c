@@ -231,6 +231,23 @@ schedule(void)
 				run(&proc_array[pid]);
 		}
 	}
+	else if (scheduling_algorithm == 3)
+	{
+		while (1)
+		{
+			if (proc_array[pid].p_state == P_RUNNABLE)
+			{
+				if (proc_array[pid].p_run_t >= proc_array[pid].p_share)
+					proc_array[pid].p_run_t = 0;
+				else
+				{
+					proc_array[pid].p_run_t;
+					run(&proc_array[pid]);
+				}
+			}
+			pid = (pid + 1) % NPROCS;
+		}
+	}
 
 	// If we get here, we are running an unknown scheduling algorithm.
 	cursorpos = console_printf(cursorpos, 0x100, "\nUnknown scheduling algorithm %d\n", scheduling_algorithm);
