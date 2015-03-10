@@ -152,7 +152,7 @@ interrupt(registers_t *reg)
 		current->p_exit_status = reg->reg_eax;
 		schedule();
 
-	case INT_SYS_SET_PRIORITY:
+	case INT_SYS_USER1:
 		// 'sys_user*' are provided for your convenience, in case you
 		// want to add a system call.
 		/* Your code here (if you want). */
@@ -165,7 +165,7 @@ interrupt(registers_t *reg)
 			run(new);
 		}
 
-	case INT_SYS_SET_SHARE:
+	case INT_SYS_USER2:
 		/* Your code here (if you want). */
 		current->p_share = current->p_pid;
 		run(current);
@@ -238,13 +238,13 @@ schedule(void)
 				pid_t i;
 				for (i = 0; i < NPROCS; i++)
 					if (proc_array[i].p_state == P_RUNNABLE &&
-						proc_array[i].p_priority < lowest)
-						lowest = proc_array[i].p_priority;
+						proc_array[i].p_priority < low)
+						low = proc_array[i].p_priority;
 
 				// search first highest-priority task
 				pid = (pid + 1) % NPROCS; // to alternate, start with next proc
 				if (proc_array[pid].p_state == P_RUNNABLE &&
-					proc_array[pid].p_priority <= lowest)
+					proc_array[pid].p_priority <= low)
 					run(&proc_array[pid]);
 			}
 			break;
