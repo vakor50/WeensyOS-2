@@ -83,7 +83,7 @@ start(void)
 		
 		//proc->p_priority = 0;
 		proc->p_share = 0; 
-		// = proc->p_completed_share = 0;
+		proc->p_completed_share = 0;
 		proc->p_runtime = 0;
 
 
@@ -108,6 +108,8 @@ start(void)
 
 	// Initialize the scheduling algorithm.
 	scheduling_algorithm = 3;
+
+	++proc_array[pid].p_completed_share;
 
 	// Switch to the first process.
 	run(&proc_array[1]);
@@ -249,19 +251,40 @@ schedule(void)
 	}
 	else if (scheduling_algorithm == 3) 
 	{
-		while (1)
+		pid_t pid2;
+		while (1) 
 		{
-			if (proc_array[pid].p_state == P_RUNNABLE)
+			if (proc_array[pid].p_state == P_RUNNABLE) 
 			{
-				if (proc_array[pid].p_runtime >= proc_array[pid].p_share)
-					proc_array[pid].p_runtime = 0;
-				else
+				if (proc_array[pid].p_completed_share < proc_array[pid].p_share) 
 				{
-					proc_array[pid].p_runtime++;
+					++proc_array[pid].p_completed_share;
 					run(&proc_array[pid]);
 				}
+				else 
+				{
+					proc_array[pid].p_completed_share = 0;
+					for (pid2 = (pid + 1) % NPROCS; pid2 != pid; pid2 = (pid2 + 1) % NPROCS)
+					{
+						if (proc_array[pid2].p_state == P_RUNNABLE) 
+						{
+							++proc_array[pid2].p_completed_share;
+							run(&proc_array[pid2]);
+						}
+					}
+				}
 			}
-			pid = (pid + 1) % NPROCS;
+			else
+			{
+				for (pid2 = (pid + 1) % NPROCS; pid2 != pid; pid2 = (pid2 + 1) % NPROCS)
+				{
+					if (proc_array[pid2].p_state == P_RUNNABLE) 
+					{
+						++proc_array[pid2].p_completed_share;
+						run(&proc_array[pid2]);
+					}
+				}
+			}
 		}
 	}
 	// If we get here, we are running an unknown scheduling algorithm.
