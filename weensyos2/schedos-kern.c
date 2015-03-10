@@ -47,7 +47,7 @@ static process_t proc_array[NPROCS];
 process_t *current;
 
 // The preferred scheduling algorithm.
-int scheduling_algorithm = 1;
+int scheduling_algorithm = 3;
 
 
 /*****************************************************************************
@@ -237,8 +237,8 @@ schedule(void)
 		{
 			if (proc_array[pid].p_state == P_RUNNABLE)
 			{
-				if (proc_array[pid].p_run_t >= proc_array[pid].p_share)
-					proc_array[pid].p_run_t = 0;
+				if (proc_array[pid].p_runtime >= proc_array[pid].p_share)
+					proc_array[pid].p_runtime = 0;
 				else
 				{
 					proc_array[pid].p_run_t;
