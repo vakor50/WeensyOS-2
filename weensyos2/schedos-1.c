@@ -33,6 +33,18 @@ void
 start(void)
 {
 	int i;
+
+	for (i = 0; i < RUNCOUNT; i++) {
+		// Write characters to the console, yielding after each one.
+		*cursorpos++ = PRINTCHAR;
+		sys_yield();
+	}
+
+	// Yield forever.
+	while (1)
+		sys_yield();
+	/*
+	int i;
 	int to_print = PRINTCHAR;
 	int priority = 0;
 	// update priority
@@ -53,4 +65,5 @@ start(void)
 	// Yield forever.
 	//while (1)
 	//	sys_yield();
+	*/
 }

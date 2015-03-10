@@ -12,7 +12,7 @@ The name of the scheduling algorithm is: Round-Robin Scheduling Algorithm
 
 (Exercise 2 is a coding exercise)
 edits to schedule() in schedos-kern.c
-edits to schedos-1.c
+edits to schedos-1.cs
 
 Response to Exercise 3:
 
