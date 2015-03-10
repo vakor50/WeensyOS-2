@@ -147,15 +147,27 @@ interrupt(registers_t *reg)
 		current->p_exit_status = reg->reg_eax;
 		schedule();
 
-	case INT_SYS_USER1:
+	case INT_SYS_SET_PRIORITY:
 		// 'sys_user*' are provided for your convenience, in case you
 		// want to add a system call.
 		/* Your code here (if you want). */
+		current->p_priority = reg->reg_eax;
+		if (current->p_pid == (NPROCS - 1)) //last process to get priority, so schedule
+			schedule();
+		else 
+		{
+			process_t *new = current + 1;
+			run(new);
+		}
+
+	case INT_SYS_SET_SHARE:
+		/* Your code here (if you want). */
+		current->p_share = current->p_pid;
 		run(current);
 
-	case INT_SYS_USER2:
-		/* Your code here (if you want). */
-		run(current);
+	case INT_SYS_WRITE:
+		*cursorpos++ = reg->reg_eax;
+		schedule();
 
 	case INT_CLOCK:
 		// A clock interrupt occurred (so an application exhausted its
