@@ -23,6 +23,9 @@
 #define PRIORITY 6
 #endif
 
+#ifndef SHARE
+#define SHARE 10
+#endif
 
 void
 start(void)

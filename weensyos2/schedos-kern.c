@@ -93,9 +93,9 @@ start(void)
 		proc->p_state = P_RUNNABLE;
 
 		//proc->p_priority = 0;
-		//proc->p_share = 0; 
+		proc->p_share = 0; 
 		// = proc->p_completed_share = 0;
-		//proc->p_runtime = 0;
+		proc->p_runtime = 0;
 	}
 
 	// Initialize the cursor-position shared variable to point to the
@@ -161,12 +161,12 @@ interrupt(registers_t *reg)
 
 	case INT_SYS_USER2:
 		/* Your code here (if you want). */
-		//current->p_share = current->p_pid;
+		current->p_share = reg->reg_eax;
 		run(current);
 
-	//case INT_SYS_WRITE:
-	//	*cursorpos++ = reg->reg_eax;
-	//	schedule();
+	case INT_SYS_WRITE:
+		*cursorpos++ = reg->reg_eax;
+		run(current);
 
 	case INT_CLOCK:
 		// A clock interrupt occurred (so an application exhausted its
@@ -243,7 +243,6 @@ schedule(void)
 			}
 
 	}
-	/*
 	else if (scheduling_algorithm == 3) 
 	{
 		while (1)
@@ -261,7 +260,6 @@ schedule(void)
 			pid = (pid + 1) % NPROCS;
 		}
 	}
-	*/
 	// If we get here, we are running an unknown scheduling algorithm.
 	cursorpos = console_printf(cursorpos, 0x100, "\nUnknown scheduling algorithm %d\n", scheduling_algorithm);
 	while (1)

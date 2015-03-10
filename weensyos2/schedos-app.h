@@ -37,15 +37,16 @@ sys_priority(unsigned int priority)
  *   Set the process's share to a specified share
  *
  *****************************************************************************/
-/*
+
 static inline void
-sys_share(void)
+sys_share(int share)
 {
 	asm volatile("int %0\n"
-		     : : "i" (INT_SYS_USER2)
+		     : : "i" (INT_SYS_USER2),
+		     	 "a" (share)
 		     : "cc", "memory");
 }
-*/
+
 
 /*****************************************************************************
  * sys_write_char(character)
