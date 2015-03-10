@@ -44,7 +44,7 @@ start(void)
 		#ifndef ALTERNATESYNC
 			sys_write_char(to_print);
 		#endif
-		#ifdef ALTERNATESYNC
+		#ifndef ALTERNATESYNC
 			while (atomic_swap(&write_lock, 1) != 0)
 				continue;
 
