@@ -204,7 +204,7 @@ schedule(void)
 	}
 	else if (scheduling_algorithm == 1)
 	{
-		pid_t save;
+		pid_t save = 1;
 		while (1)
 		{
 			if (proc_array[save].p_state == P_RUNNABLE)
