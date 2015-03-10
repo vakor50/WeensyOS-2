@@ -36,7 +36,8 @@ start(void)
 
 	//while (!(priority = generate_priority() % NPROCS)); //priority > 0
 	sys_priority(PRIORITY);
-	sys_share(SHARE);
+	//sys_share(SHARE);
+	sys_share();
 	sys_yield();
 
 	for (i = 0; i < RUNCOUNT; i++) {
