@@ -189,6 +189,7 @@ void
 schedule(void)
 {
 	pid_t pid = current->p_pid;
+	unsigned int low = 0xffffffff; // highest possibel unsigned int
 
 	if (scheduling_algorithm == 0)
 	{
