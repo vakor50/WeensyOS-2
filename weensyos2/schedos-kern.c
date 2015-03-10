@@ -234,12 +234,11 @@ schedule(void)
 	else if (scheduling_algorithm == 2) // priority scheduler
 	{
 		while (1) {
-				// get highest-priority number
-				pid_t i;
-				for (i = 0; i < NPROCS; i++)
-					if (proc_array[i].p_state == P_RUNNABLE &&
-						proc_array[i].p_priority < low)
-						low = proc_array[i].p_priority;
+			// get highest-priority number
+			pid_t i;
+			for (i = 0; i < NPROCS; i++)
+				if (proc_array[i].p_state == P_RUNNABLE && proc_array[i].p_priority < low)
+					low = proc_array[i].p_priority;
 
 				// search first highest-priority task
 				pid = (pid + 1) % NPROCS; // to alternate, start with next proc
@@ -247,7 +246,8 @@ schedule(void)
 					proc_array[pid].p_priority <= low)
 					run(&proc_array[pid]);
 			}
-			break;
+		}
+
 	}
 	else if (scheduling_algorithm == 3) // proportional-share scheduling
 	{
