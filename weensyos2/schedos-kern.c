@@ -237,6 +237,7 @@ schedule(void)
 			// get highest-priority number
 			pid_t i;
 			for (i = 0; i < NPROCS; i++)
+			{
 				if (proc_array[i].p_state == P_RUNNABLE && proc_array[i].p_priority < low)
 					low = proc_array[i].p_priority;
 
