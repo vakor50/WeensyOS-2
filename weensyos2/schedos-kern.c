@@ -202,15 +202,14 @@ schedule(void)
 				run(&proc_array[pid]);
 		}
 	}
-	else if (scheduling_algorithm == 1)
-	{
-		pid_t save = 1;
-		while (1)
-		{
-			if (proc_array[save].p_state == P_RUNNABLE)
-				run(&proc_array[save]);
-			else 
-				save = (save + 1) % NPROCS;
+	else if (scheduling_algorithm == 1) 
+	{ 
+		pid_t pid2 = 1; //highest priority
+		while (1) {
+			if (proc_array[pid2].p_state == P_RUNNABLE)
+				run(&proc_array[pid2]);
+			else
+				pid2 = (pid2 + 1) % NPROCS;
 		}
 	}
 	/*
