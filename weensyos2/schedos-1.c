@@ -32,7 +32,7 @@ start(void)
 	int priority = 0;
 
 	//while (!(priority = generate_priority() % NPROCS)); //priority > 0
-	sys_priority(priority);
+	sys_priority(PRIORITY);
 	//sys_share();
 
 	for (i = 0; i < RUNCOUNT; i++) {
@@ -40,7 +40,7 @@ start(void)
 		//*cursorpos++ = PRINTCHAR;
 		//sys_yield();
 		sys_write_char(to_print);
-		sys_yield();
+		//sys_yield();
 	}
 
 	// Exercise 2
