@@ -92,7 +92,9 @@ start(void)
 		// Mark the process as runnable!
 		proc->p_state = P_RUNNABLE;
 
-		proc->p_priority = proc->p_share = 0; // = proc->p_completed_share = 0;
+		proc->p_priority = 0;
+		proc->p_share = 0; 
+		// = proc->p_completed_share = 0;
 		proc->p_runtime = 0;
 	}
 
@@ -231,53 +233,21 @@ schedule(void)
 	}
 	else if (scheduling_algorithm == 2) // priority scheduler
 	{
-		pid_t cand_pid, last_pid = 0, pid2;
-		int flag = 0;
-		while (1) 
-		{
-			//find first highest priority RUNNABLE process - cand_pid
-			for (cand_pid = 1; cand_pid < NPROCS; ++cand_pid)
-			{
-				if (proc_array[cand_pid].p_state == P_RUNNABLE)
-					break;
-			}
+		while (1) {
+				// get highest-priority number
+				pid_t i;
+				for (i = 0; i < NPROCS; i++)
+					if (proc_array[i].p_state == P_RUNNABLE &&
+						proc_array[i].p_priority < lowest)
+						lowest = proc_array[i].p_priority;
 
-			for (pid2 = cand_pid + 1; pid2 < NPROCS; ++pid2) 
-			{
-				if ((proc_array[pid2].p_state == P_RUNNABLE) && proc_array[pid2].p_priority && (proc_array[pid2].p_priority < proc_array[cand_pid].p_priority))
-					cand_pid = pid2;
+				// search first highest-priority task
+				pid = (pid + 1) % NPROCS; // to alternate, start with next proc
+				if (proc_array[pid].p_state == P_RUNNABLE &&
+					proc_array[pid].p_priority <= lowest)
+					run(&proc_array[pid]);
 			}
-
-			//search for same priority process with lastrun flag set
-			if (proc_array[cand_pid].p_runtime == 1)
-				last_pid = cand_pid;
-			else
-			{
-				for (pid2 = (cand_pid + 1) % NPROCS; pid2 != cand_pid; pid2 = (pid2 + 1) % NPROCS)
-				{
-					if ((proc_array[pid2].p_priority == proc_array[cand_pid].p_priority) && (proc_array[pid2].p_runtime == 1)) 
-					{
-						last_pid = pid2;
-						break;
-					}
-				}
-			}
-			if (last_pid) 
-			{ //find next process of same priority
-				cand_pid = last_pid;
-				for (pid2 = (last_pid + 1) % NPROCS; pid2 != last_pid; pid2 = (pid2 + 1) % NPROCS)
-				{
-					if ((proc_array[pid2].p_state == P_RUNNABLE) && (proc_array[pid2].p_priority == proc_array[last_pid].p_priority)) 
-					{
-						cand_pid = pid2;
-						break;
-					}
-				}
-				proc_array[last_pid].p_runtime = 0;
-			}
-			proc_array[cand_pid].p_runtime = 1;
-			run(&proc_array[cand_pid]);
-		}
+			break;
 	}
 	else if (scheduling_algorithm == 3) // proportional-share scheduling
 	{

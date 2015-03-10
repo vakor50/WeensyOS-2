@@ -14,8 +14,8 @@
 
 #define INT_SYS_YIELD			48
 #define INT_SYS_EXIT			49
-#define INT_SYS_SET_PRIORITY	50
-#define INT_SYS_SET_SHARE		51
+#define INT_SYS_USER1			50
+#define INT_SYS_USER2			51
 #define INT_SYS_WRITE 			52
 
 
