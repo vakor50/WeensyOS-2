@@ -208,7 +208,7 @@ schedule(void)
 		while (1)
 		{
 			if (proc_array[save].p_state == P_RUNNABLE)
-				run(&proc_array[pid]);
+				run(&proc_array[save]);
 			else 
 				save = (save + 1) % NPROCS;
 		}
