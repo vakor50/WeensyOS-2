@@ -241,7 +241,7 @@ schedule(void)
 					proc_array[pid].p_runtime = 0;
 				else
 				{
-					proc_array[pid].p_run_t;
+					proc_array[pid].p_runtime;
 					run(&proc_array[pid]);
 				}
 			}
