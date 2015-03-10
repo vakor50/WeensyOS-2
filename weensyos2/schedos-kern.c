@@ -98,7 +98,7 @@ start(void)
 	cursorpos = (uint16_t *) 0xB8000;
 
 	// Initialize the scheduling algorithm.
-	scheduling_algorithm = 0;
+	scheduling_algorithm = 1;
 
 	// Switch to the first process.
 	run(&proc_array[1]);
@@ -202,17 +202,17 @@ schedule(void)
 				run(&proc_array[pid]);
 		}
 	}
-	else if (scheduling_algorithm == 1) 
+	else if (scheduling_algorithm == 1)  // fixed priority scheduler
 	{ 
-		pid_t pid2 = 1; //highest priority
-		while (1) {
-			if (proc_array[pid2].p_state == P_RUNNABLE)
-				run(&proc_array[pid2]);
+		pid_t fix = 1;
+		while (1) 
+		{
+			if (proc_array[fix].p_state == P_RUNNABLE)
+				run(&proc_array[fix]);
 			else
-				pid2 = (pid2 + 1) % NPROCS;
+				fix = (fix + 1) % fix;
 		}
 	}
-	/*
 	else if (scheduling_algorithm == 2) // priority scheduler
 	{
 		while (1)
@@ -230,6 +230,7 @@ schedule(void)
 				run(&proc_array[pid]);
 		}
 	}
+	/*
 	else if (scheduling_algorithm == 3) // proportional-share scheduling
 	{
 		while (1)
