@@ -146,25 +146,16 @@ interrupt(registers_t *reg)
 		current->p_state = P_ZOMBIE;
 		current->p_exit_status = reg->reg_eax;
 		schedule();
-	// INT_SYS_USER1
-	case INT_SYS_SETPRIORITY:
-		//current->p_priority = reg->reg_eax;
-		//if (current->p_pid == (NPROCS - 1)) 
-		//	schedule();
-		//else 
-		//{
-		//	process_t *new = current + 1;
-		//	run(new);
-		//}
+
+	case INT_SYS_USER1:
+		// 'sys_user*' are provided for your convenience, in case you
+		// want to add a system call.
+		/* Your code here (if you want). */
 		run(current);
-	// INT_SYS_USER2
-	case INT_SYS_SETSHARE:
-		//current->p_share = current->p_pid;
+
+	case INT_SYS_USER2:
+		/* Your code here (if you want). */
 		run(current);
-	// INT_SYS_USER3
-	//case INT_SYS_WRITE:
-	//	*cursorpos++ = reg->reg_eax;
-	//	schedule();
 
 	case INT_CLOCK:
 		// A clock interrupt occurred (so an application exhausted its
@@ -198,7 +189,6 @@ void
 schedule(void)
 {
 	pid_t pid = current->p_pid;
-	unsigned int low = 0xffffffff; // = max unsigned int value
 
 	if (scheduling_algorithm == 0)
 	{
@@ -223,6 +213,7 @@ schedule(void)
 				save = (save + 1) % NPROCS;
 		}
 	}
+	/*
 	else if (scheduling_algorithm == 2) // priority scheduler
 	{
 		while (1)
@@ -257,7 +248,7 @@ schedule(void)
 			pid = (pid + 1) % NPROCS;
 		}
 	}
-
+	*/
 	// If we get here, we are running an unknown scheduling algorithm.
 	cursorpos = console_printf(cursorpos, 0x100, "\nUnknown scheduling algorithm %d\n", scheduling_algorithm);
 	while (1)

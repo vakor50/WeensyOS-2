@@ -18,17 +18,6 @@
 #define PRINTCHAR	('1' | 0x0C00)
 #endif
 
-#ifndef RANDSEED
-#define RANDSEED	0xACE1u
-#endif
-
-unsigned short seed = RANDSEED;
-
-int priority_rand() {
-	unsigned randbit = ((seed >> 0) ^ (seed >> 2) ^ (seed >> 3) ^ (seed >> 5)) &  1;
-	return (seed = (seed >> 1) | (randbit << 15));
-}
-
 void
 start(void)
 {
