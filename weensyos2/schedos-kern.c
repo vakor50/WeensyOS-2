@@ -47,7 +47,7 @@ static process_t proc_array[NPROCS];
 process_t *current;
 
 // The preferred scheduling algorithm.
-int scheduling_algorithm;
+int scheduling_algorithm = 1;
 
 
 /*****************************************************************************
@@ -189,6 +189,7 @@ void
 schedule(void)
 {
 	pid_t pid = current->p_pid;
+	unsigned int low = 0xffffffff; // = max unsigned int value
 
 	if (scheduling_algorithm == 0)
 	{
@@ -211,6 +212,23 @@ schedule(void)
 				run(&proc_array[save]);
 			else 
 				save = (save + 1) % NPROCS;
+		}
+	}
+	else if (scheduling_algorithm == 2)
+	{
+		while (1)
+		{
+			pid = (pid + 1) % NPROCS;
+			// need to find highest priority number
+			pid_t n;
+			for (n = 0; n < NPROCS; n++)
+			{
+				if (proc_array[n].p_state == P_RUNNABLE && proc_array[n].p_priority < low)
+					low = proc_array[n].p_priority;
+			}
+
+			if (proc_array[pid].p_state == P_RUNNABLE && proc_array[pid].p_priority <= low)
+				run(&proc_array[pid]);
 		}
 	}
 
