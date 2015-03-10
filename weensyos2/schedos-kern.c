@@ -230,37 +230,51 @@ schedule(void)
 	{
 		pid_t cand_pid, last_pid = 0, pid2;
 		int flag = 0;
-		while (1) {
+		while (1) 
+		{
 			//find first highest priority RUNNABLE process - cand_pid
 			for (cand_pid = 1; cand_pid < NPROCS; ++cand_pid)
+			{
 				if (proc_array[cand_pid].p_state == P_RUNNABLE)
 					break;
+			}
 
 			for (pid2 = cand_pid + 1; pid2 < NPROCS; ++pid2) 
+			{
 				if ((proc_array[pid2].p_state == P_RUNNABLE) && proc_array[pid2].p_priority && (proc_array[pid2].p_priority < proc_array[cand_pid].p_priority))
 					cand_pid = pid2;
+			}
 
 			//search for same priority process with lastrun flag set
 			if (proc_array[cand_pid].p_runtime == 1)
 				last_pid = cand_pid;
 			else
+			{
 				for (pid2 = (cand_pid + 1) % NPROCS; pid2 != cand_pid; pid2 = (pid2 + 1) % NPROCS)
-					if ((proc_array[pid2].p_priority == proc_array[cand_pid].p_priority) && (proc_array[pid2].p_runtime == 1)) {
+				{
+					if ((proc_array[pid2].p_priority == proc_array[cand_pid].p_priority) && (proc_array[pid2].p_runtime == 1)) 
+					{
 						last_pid = pid2;
 						break;
 					}
-
-			if (last_pid) { //find next process of same priority
+				}
+			}
+			if (last_pid) 
+			{ //find next process of same priority
 				cand_pid = last_pid;
 				for (pid2 = (last_pid + 1) % NPROCS; pid2 != last_pid; pid2 = (pid2 + 1) % NPROCS)
-					if ((proc_array[pid2].p_state == P_RUNNABLE) && (proc_array[pid2].p_priority == proc_array[last_pid].p_priority)) {
+				{
+					if ((proc_array[pid2].p_state == P_RUNNABLE) && (proc_array[pid2].p_priority == proc_array[last_pid].p_priority)) 
+					{
 						cand_pid = pid2;
 						break;
 					}
+				}
 				proc_array[last_pid].p_runtime = 0;
 			}
 			proc_array[cand_pid].p_runtime = 1;
 			run(&proc_array[cand_pid]);
+		}
 	}
 	else if (scheduling_algorithm == 3) // proportional-share scheduling
 	{
