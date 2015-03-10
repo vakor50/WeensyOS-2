@@ -80,6 +80,13 @@ start(void)
 		process_t *proc = &proc_array[i];
 		uint32_t stack_ptr = PROC1_START + i * PROC_SIZE;
 
+		
+		//proc->p_priority = 0;
+		proc->p_share = 0; 
+		// = proc->p_completed_share = 0;
+		proc->p_runtime = 0;
+
+
 		// Initialize the process descriptor
 		special_registers_init(proc);
 
@@ -92,10 +99,7 @@ start(void)
 		// Mark the process as runnable!
 		proc->p_state = P_RUNNABLE;
 
-		//proc->p_priority = 0;
-		proc->p_share = 0; 
-		// = proc->p_completed_share = 0;
-		proc->p_runtime = 0;
+		
 	}
 
 	// Initialize the cursor-position shared variable to point to the
