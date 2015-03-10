@@ -29,9 +29,18 @@ start(void)
 		sys_yield();
 	}
 
+	// Exercise 2
+	// now processes exit, and don't yield forever
+	sys_exit();
 	// Yield forever.
-	while (1)
-		sys_yield();
+	//while (1)
+	//	sys_yield();
+	
+
+
+
+
+
 	/*
 	int i;
 	int to_print = PRINTCHAR;
