@@ -205,34 +205,50 @@ schedule(void)
 	}
 	else if (scheduling_algorithm == 1)  // fixed priority scheduler
 	{ 
-		pid_t fix = 1;
+		pid_t fixed = 1;
 		while (1) 
 		{
-			if (proc_array[fix].p_state == P_RUNNABLE)
-				run(&proc_array[fix]);
+			if (proc_array[fixed].p_state == P_RUNNABLE)
+				run(&proc_array[fixed]);
 			else
-				fix = (fix + 1) % fix;
+				fixed = (fixed + 1) % NPROCS;
 		}
 	}
 	else if (scheduling_algorithm == 2) // priority scheduler
 	{
 		while (1)
 		{
+			pid_t i;
 			pid = (pid + 1) % NPROCS;
-			// need to find highest priority number
-			pid_t n;
-			for (n = 0; n < NPROCS; n++)
+			for (i = 0; i < NPROCS; i++)
 			{
-				if (proc_array[n].p_state == P_RUNNABLE && proc_array[n].p_priority < low)
-					low = proc_array[n].p_priority;
+				if (proc_array[i].p_state == P_RUNNABLE && proc_array[i].p_priority < low)
+					low = proc_array[i].p_priority;
 			}
 
 			if (proc_array[pid].p_state == P_RUNNABLE && proc_array[pid].p_priority <= low)
 				run(&proc_array[pid]);
 		}
 	}
-	/*
 	else if (scheduling_algorithm == 3) // proportional-share scheduling
+	{
+		while (1)
+		{
+			if (proc_array[pid].p_state == P_RUNNABLE)
+			{
+				if (proc_array[pid].p_share <= proc_array[pid].p_runtime)
+					proc_array[pid].p_runtime = 0;
+				else
+				{
+					proc_array[pid].p_runtime++;
+					run(&proc_array[pid]);
+				}
+			}
+			pid = (pid + 1) % NPROCS;
+		}
+	}
+	/*
+	else if (scheduling_algorithm == 3) 
 	{
 		while (1)
 		{

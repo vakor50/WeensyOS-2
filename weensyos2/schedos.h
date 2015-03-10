@@ -14,18 +14,16 @@
 
 #define INT_SYS_YIELD		48
 #define INT_SYS_EXIT		49
-#define INT_SYS_USER1		50
-#define INT_SYS_USER2		51
-//#define INT_SYS_SETPRIORITY	50
-//#define INT_SYS_SETSHARE	51
-//#define	INT_SYS_WRITE		52
+#define INT_SYS_SETPRIORITY	50
+#define INT_SYS_SETSHARE	51
+#define INT_SYS_WRITE 		52
 
 
 // The current screen cursor position (stored at memory location 0x198000).
 
 extern uint16_t * volatile cursorpos;
 
-// for synchronization
-//extern uint32_t write_lock;
+#define NPROCS				5
+#define RUNCOUNT			320
 
 #endif

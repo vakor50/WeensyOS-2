@@ -18,15 +18,38 @@
 #define PRINTCHAR	('1' | 0x0C00)
 #endif
 
+
+
+
+#ifndef RANDSEED
+#define RANDSEED	0xACE1u
+#endif
+
+unsigned short seed = RANDSEED;
+
+int generate_priority() 
+{
+	unsigned randbit = ((seed >> 0) ^ (seed >> 2) ^ (seed >> 3) ^ (seed >> 5)) &  1;
+	return (seed = (seed >> 1) | (randbit << 15));
+}
+
+
 void
 start(void)
 {
 	int i;
+	int to_print = PRINTCHAR;
+	int priority = 0;
+
+	while (!(priority = generate_priority() % NPROCS)); //priority > 0
+	sys_priority(priority);
+	sys_share();
 
 	for (i = 0; i < RUNCOUNT; i++) {
 		// Write characters to the console, yielding after each one.
-		*cursorpos++ = PRINTCHAR;
-		sys_yield();
+		//*cursorpos++ = PRINTCHAR;
+		//sys_yield();
+		sys_write_char(to_print);
 	}
 
 	// Exercise 2

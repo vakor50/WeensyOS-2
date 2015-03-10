@@ -15,36 +15,37 @@
 
 
 /*****************************************************************************
- * sys_set_share
- *
- *   Set the process's share to a specified share
- *
- *****************************************************************************/
-/*
-static inline void
-sys_setshare(void)
-{
-	asm volatile("int %0\n"
-		     : : "i" (INT_SYS_SETSHARE),
-		     : "cc", "memory");
-}
-*/
-/*****************************************************************************
  * sys_set_priority(priority)
  *
  *   Set the process's priority
  *
  *****************************************************************************/
-/*
+
 static inline void
-sys_setpriority(unsigned int priority)
+sys_priority(unsigned int priority)
 {
 	asm volatile("int %0\n"
 		     : : "i" (INT_SYS_SETPRIORITY),
 		         "a" (priority)
 		     : "cc", "memory");
 }
-*/
+
+
+/*****************************************************************************
+ * sys_set_share
+ *
+ *   Set the process's share to a specified share
+ *
+ *****************************************************************************/
+
+static inline void
+sys_share(void)
+{
+	asm volatile("int %0\n"
+		     : : "i" (INT_SYS_SETSHARE),
+		     : "cc", "memory");
+}
+
 
 /*****************************************************************************
  * sys_write_char(character)
@@ -52,7 +53,7 @@ sys_setpriority(unsigned int priority)
  *   Print the character associated with the process to output
  *
  *****************************************************************************/
-/*
+
 static inline void
 sys_write_char(unsigned int character)
 {
@@ -61,7 +62,7 @@ sys_write_char(unsigned int character)
 		         "a" (character)
 		     : "cc", "memory");
 }
-*/
+
 
 /*****************************************************************************
  * sys_yield
