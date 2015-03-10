@@ -36,7 +36,7 @@ start(void)
 
 	//while (!(priority = generate_priority() % NPROCS)); //priority > 0
 	sys_priority(PRIORITY);
-	//sys_share();
+	sys_share(SHARE);
 
 	for (i = 0; i < RUNCOUNT; i++) {
 		// Write characters to the console, yielding after each one.
