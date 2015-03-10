@@ -33,6 +33,7 @@ typedef struct process {
 	/*-----*/
 	unsigned int p_priority;	// Process's priority (low # = high priority)
 	unsigned int p_share;		// Process's share
+	//unsigned int p_completed_share; // Process's finished shares
 	unsigned int p_runtime;		// Process's run time
 
 } process_t;
