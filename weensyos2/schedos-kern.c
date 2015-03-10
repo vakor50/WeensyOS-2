@@ -92,10 +92,10 @@ start(void)
 		// Mark the process as runnable!
 		proc->p_state = P_RUNNABLE;
 
-		proc->p_priority = 0;
-		proc->p_share = 0; 
+		//proc->p_priority = 0;
+		//proc->p_share = 0; 
 		// = proc->p_completed_share = 0;
-		proc->p_runtime = 0;
+		//proc->p_runtime = 0;
 	}
 
 	// Initialize the cursor-position shared variable to point to the
@@ -157,22 +157,16 @@ interrupt(registers_t *reg)
 		// want to add a system call.
 		/* Your code here (if you want). */
 		current->p_priority = reg->reg_eax;
-		if (current->p_pid == (NPROCS - 1)) //last process to get priority, so schedule
-			schedule();
-		else 
-		{
-			process_t *new = current + 1;
-			run(new);
-		}
+		run(current);
 
 	case INT_SYS_USER2:
 		/* Your code here (if you want). */
-		current->p_share = current->p_pid;
+		//current->p_share = current->p_pid;
 		run(current);
 
-	case INT_SYS_WRITE:
-		*cursorpos++ = reg->reg_eax;
-		schedule();
+	//case INT_SYS_WRITE:
+	//	*cursorpos++ = reg->reg_eax;
+	//	schedule();
 
 	case INT_CLOCK:
 		// A clock interrupt occurred (so an application exhausted its
