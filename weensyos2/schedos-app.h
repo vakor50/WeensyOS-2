@@ -42,7 +42,7 @@ static inline void
 sys_share(void)
 {
 	asm volatile("int %0\n"
-		     : : "i" (INT_SYS_SET_SHARE),
+		     : : "i" (INT_SYS_SET_SHARE)
 		     : "cc", "memory");
 }
 
