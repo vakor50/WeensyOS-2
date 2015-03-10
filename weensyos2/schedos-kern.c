@@ -191,6 +191,7 @@ schedule(void)
 	pid_t pid = current->p_pid;
 
 	if (scheduling_algorithm == 0)
+	{
 		while (1) {
 			pid = (pid + 1) % NPROCS;
 
@@ -200,6 +201,18 @@ schedule(void)
 			if (proc_array[pid].p_state == P_RUNNABLE)
 				run(&proc_array[pid]);
 		}
+	}
+	else if (scheduling_algorithm == 1)
+	{
+		pid_t save;
+		while (1)
+		{
+			if (proc_array[save].p_state == P_RUNNABLE)
+				run(&proc_array[pid]);
+			else 
+				save = (save + 1) % NPROCS;
+		}
+	}
 
 	// If we get here, we are running an unknown scheduling algorithm.
 	cursorpos = console_printf(cursorpos, 0x100, "\nUnknown scheduling algorithm %d\n", scheduling_algorithm);
