@@ -23,7 +23,4 @@
 
 extern uint16_t * volatile cursorpos;
 
-#define NPROCS				5
-#define RUNCOUNT			320
-
 #endif
