@@ -125,7 +125,7 @@ start(void)
 	cursorpos = (uint16_t *) 0xB8000;
 
 	// Initialize the scheduling algorithm.
-	scheduling_algorithm = 3;
+	scheduling_algorithm = 4;
 	pid_t pid = 1;
 	++proc_array[pid].p_completed_share;
 
