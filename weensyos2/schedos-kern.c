@@ -50,6 +50,8 @@ process_t *current;
 // The preferred scheduling algorithm.
 int scheduling_algorithm;
 
+static pid_t lottery_nums[SIZE_OF_LOTTERY] = {0};
+
 static unsigned short seed = 0xDAB1u;
 
 /*****************************************************************************
@@ -310,9 +312,9 @@ schedule(void)
 	{
 		while (1)
 		{
-			pid_t pid2;
-			int winner = select_lottery() % SIZE_OF_LOTTERY;
-
+			
+			int choose = select_lottery() % SIZE_OF_LOTTERY;
+			pid_t pid2 = lottery_nums[choose];
 			if (proc_array[pid2].p_state == P_RUNNABLE)
 				run(&proc_array[pid2]);
 		}
