@@ -124,7 +124,7 @@ start(void)
 
 		int total = SIZE_OF_LOTTERY / (NPROCS - 1);
 		int offset = total * (i - 1);
-		set_process_lottery_num(total, offset + lottery_nums, proc->pid);
+		set_process_lottery_num(total, offset + lottery_nums, proc->p_pid);
 	}
 
 	// Initialize the cursor-position shared variable to point to the
