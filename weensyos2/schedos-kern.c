@@ -108,7 +108,7 @@ start(void)
 
 	// Initialize the scheduling algorithm.
 	scheduling_algorithm = 3;
-
+	pid_t pid = 1;
 	++proc_array[pid].p_completed_share;
 
 	// Switch to the first process.
