@@ -15,7 +15,6 @@ edits to schedule() in schedos-kern.c
 edits to schedos-1.cs
 
 Response to Exercise 3:
-
 Average turnaround time for scheduling_algorithm 0: (1277 + 1278 + 1279 + 1280)/4
 = 1278.5 ms
 Average turnaround time for scheduling_algorithm 1: (320 + 640 + 960 + 1280)/4
@@ -27,17 +26,42 @@ Average wait time for scheduling_algorithm 1: (0 + 320 + 640 + 960)/4 = 480 ms
 
 Exercise 4:
 
-Did you complete Exercise 4A, Exercise 4B, or both for extra credit?
+Did you complete Exercise 4A, Exercise 4B, or both for extra credit? 
+Both for extra credit
+4A: 
+edits to schedos_kern.h within process_t
+edits to schedos-app.h for sys_priority system call
+edits to schedos-kern.c for interrupt handler, schedule
+edits to schedos-1.c to call system call sys_priority()
 
+4B:
+edits to schedos_kern.h within process_t
+edits to schedos-app.h for sys_share system call
+edits to schedos-kern.c for interrupt handler, schedule
+edits to schedos-1.c to call system call sys_share()
 
 Exercise 5:
-
+The first known timer interrupt occurs at process 4 using round-robin scheduling.
+Process 4 was unable to print on the fifth cycle of the round-robin resulting in:
+1234 1234 1234 1234  *123* 1234
 
 (Exercise 6 is a coding exercise)
-
+edits to schedos.h to add INT_SYS_WRITE with number 52
+edits to schedos-app.h to add system call sys_write_char
+edits to schedos-kern.c add interrupt handler for INT_SYS_WRITE
+edits to schedos-1.c to call system call sys_write_char()
 
 Anything else you'd like us to know:
-
+Unable to implement Extra-Credit Exercise 8
 
 
 Extra credit exercises:
+Exercise 7: Implemented lottery scheduling
+created an array of pids big enough to make sure we can have lottery tickets for
+every process. then, we used code in set_process_lottery_num() to assign lottery 
+tickets to each process. Once, we've assigned these, we call select_lottery() 
+through schedule() to randomly select a winning lottery, which is equivalent
+to selecting the next rpocess to run. 
+
+
+

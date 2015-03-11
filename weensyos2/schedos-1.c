@@ -54,33 +54,4 @@ start(void)
 	// Yield forever.
 	//while (1)
 	//	sys_yield();
-	
-
-
-
-
-
-	/*
-	int i;
-	int to_print = PRINTCHAR;
-	int priority = 0;
-	// update priority
-	while (!(priority = priority_rand() % NPROCS));
-
-	sys_setshare();
-	sys_setpriority(priority);
-	
-	for (i = 0; i < RUNCOUNT; i++) {
-		// Write characters to the console, yielding after each one.
-		sys_write_char(to_print);
-	}
-
-	// Exercise 2
-	// now processes exit, and don't yield forever
-	sys_exit(0);
-
-	// Yield forever.
-	//while (1)
-	//	sys_yield();
-	*/
 }
