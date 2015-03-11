@@ -289,7 +289,7 @@ schedule(void)
 							++proc_array[pid2].p_completed_share;
 							run(&proc_array[pid2]);
 						}
-						pid2 = (pid2 + 1) % NPROCS
+						pid2 = (pid2 + 1) % NPROCS;
 					}
 				}
 			}
