@@ -20,7 +20,7 @@
 #define NPROCS			5
 #define PROC1_START		0x200000
 #define PROC_SIZE		0x100000
-#define SIZE_OF_LOTTERY	320 * NPROCS
+#define SIZE_OF_LOTTERY	(320 * NPROCS)
 
 // +---------+-----------------------+--------+---------------------+---------/
 // | Base    | Kernel         Kernel | Shared | App 0         App 0 | App 1
@@ -67,6 +67,13 @@ int select_lottery()
 	return (seed = (seed >> 1) | (randbit << 15));
 }
 
+void set_process_lottery_num(int count, pid_t *array, pid_t pid)
+{
+	int i;
+	for (i = 0; i < count; ++i)
+		array[i] = pid;
+}
+
 
 /*****************************************************************************
  * start
@@ -98,13 +105,6 @@ start(void)
 		process_t *proc = &proc_array[i];
 		uint32_t stack_ptr = PROC1_START + i * PROC_SIZE;
 
-		
-		//proc->p_priority = 0;
-		proc->p_share = 0; 
-		proc->p_completed_share = 0;
-		proc->p_runtime = 0;
-
-
 		// Initialize the process descriptor
 		special_registers_init(proc);
 
@@ -117,7 +117,14 @@ start(void)
 		// Mark the process as runnable!
 		proc->p_state = P_RUNNABLE;
 
-		
+		//proc->p_priority = 0;
+		proc->p_share = 0; 
+		proc->p_completed_share = 0;
+		proc->p_runtime = 0;
+
+		int total = SIZE_OF_LOTTERY / (NPROCS - 1);
+		int offset = total * (i - 1);
+		set_process_lottery_num(total, offset + lottery_nums, proc->pid);
 	}
 
 	// Initialize the cursor-position shared variable to point to the
