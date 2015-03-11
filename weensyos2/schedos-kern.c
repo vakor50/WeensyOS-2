@@ -17,9 +17,10 @@
 // (But note that SchedOS processes, like MiniprocOS processes, are not fully
 // isolated: any process could modify any part of memory.)
 
-#define NPROCS		5
-#define PROC1_START	0x200000
-#define PROC_SIZE	0x100000
+#define NPROCS			5
+#define PROC1_START		0x200000
+#define PROC_SIZE		0x100000
+#define SIZE_OF_LOTTERY	320 * NPROCS
 
 // +---------+-----------------------+--------+---------------------+---------/
 // | Base    | Kernel         Kernel | Shared | App 0         App 0 | App 1
@@ -48,6 +49,21 @@ process_t *current;
 
 // The preferred scheduling algorithm.
 int scheduling_algorithm;
+
+static unsigned short seed = 0xDAB1u;
+
+/*****************************************************************************
+ * select_lottery
+ *
+ *   Generate a random number to be used to select a process to run
+ *
+ *****************************************************************************/
+
+int select_lottery() 
+{
+	unsigned randbit = ((seed >> 0) ^ (seed >> 2) ^ (seed >> 3) ^ (seed >> 5)) &  1;
+	return (seed = (seed >> 1) | (randbit << 15));
+}
 
 
 /*****************************************************************************
@@ -233,20 +249,21 @@ schedule(void)
 	}
 	else if (scheduling_algorithm == 2) // priority scheduler
 	{
-		while (1) {
-				// get highest-priority number
-				pid_t i;
-				for (i = 0; i < NPROCS; i++)
-					if (proc_array[i].p_state == P_RUNNABLE &&
-						proc_array[i].p_priority < low)
-						low = proc_array[i].p_priority;
-
-				// search first highest-priority task
-				pid = (pid + 1) % NPROCS; // to alternate, start with next proc
-				if (proc_array[pid].p_state == P_RUNNABLE &&
-					proc_array[pid].p_priority <= low)
-					run(&proc_array[pid]);
+		while (1) 
+		{
+			// get highest-priority number
+			pid_t i;
+			for (i = 0; i < NPROCS; i++)
+			{
+				if (proc_array[i].p_state == P_RUNNABLE && proc_array[i].p_priority < low)
+					low = proc_array[i].p_priority;
 			}
+
+			// search first highest-priority task
+			pid = (pid + 1) % NPROCS; // to alternate, start with next proc
+			if (proc_array[pid].p_state == P_RUNNABLE && proc_array[pid].p_priority <= low)
+				run(&proc_array[pid]);
+		}
 
 	}
 	else if (scheduling_algorithm == 3) 
@@ -264,13 +281,15 @@ schedule(void)
 				else 
 				{
 					proc_array[pid].p_completed_share = 0;
-					for (pid2 = (pid + 1) % NPROCS; pid2 != pid; pid2 = (pid2 + 1) % NPROCS)
+					pid2 = (pid + 1) % NPROCS;
+					while (pid != pid2)
 					{
 						if (proc_array[pid2].p_state == P_RUNNABLE) 
 						{
 							++proc_array[pid2].p_completed_share;
 							run(&proc_array[pid2]);
 						}
+						pid2 = (pid2 + 1) % NPROCS
 					}
 				}
 			}
@@ -285,6 +304,17 @@ schedule(void)
 					}
 				}
 			}
+		}
+	}
+	else if (scheduling_algorithm == 4)
+	{
+		while (1)
+		{
+			pid_t pid2;
+			int winner = select_lottery() % SIZE_OF_LOTTERY;
+
+			if (proc_array[pid2].p_state == P_RUNNABLE)
+				run(&proc_array[pid2]);
 		}
 	}
 	// If we get here, we are running an unknown scheduling algorithm.
